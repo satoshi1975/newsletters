@@ -1,0 +1,102 @@
+{%include 'base.html'%}
+<div>
+  <form id="newsletterform" action="" method="post">
+    {% csrf_token %}
+    <div id="newsletter">
+      <label id="newsletter_label" for="textarea">New newsletter</label>
+      <div id="userpassform">
+        <label for="sender_email"
+          >your email(gmail) username and app password (allow acces to untrusted
+          apps)</label
+        >
+        <input
+          type="text"
+          style="margin-top: 14px"
+          name="sender_email"
+          id="sender_email"
+          placeholder="your email"
+          value="{{user.email}}"
+        />
+        <input
+          type="password"
+          style="margin-top: 14px"
+          name="password"
+          id="password"
+          placeholder="your app password"
+        />
+      </div>
+      <label for="textarea">
+        place first_name,last_name,email or date_of_birth in double braces to
+        substitute the users data in that place
+      </label>
+      <input
+        type="text"
+        name="subject"
+        id="subject"
+        placeholder="email subject"
+      />
+      <textarea
+        placeholder="text"
+        name="lettertext"
+        id="textarea"
+        cols="30"
+        rows="10"
+      ></textarea>
+    </div>
+    <div id="send-men">
+      <input type="text" id="filter-send-input" placeholder="Search" />
+      <button type="button" id="newsletterbtn">send</button>
+
+      <input
+        type="datetime-local"
+        name="delayed_start"
+        class="datetimepicker"
+      />
+    </div>
+    <div id="recipients">{{form.recipients}}</div>
+  </form>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $("#filter-send-input").on("input", function () {
+      var searchText = $(this).val().toLowerCase();
+      $("#recipients li").each(function () {
+        var subCardText = $(this).text().toLowerCase();
+        if (subCardText.indexOf(searchText) === -1) {
+          $(this).hide();
+        } else {
+          $(this).show();
+        }
+      });
+    });
+  });
+</script>
+<script>
+  $(document).ready(function () {
+    $("#newsletterbtn").click(function () {
+      const email = document.getElementById("sender_email").value.trim();
+      const pass = document.getElementById("password").value.trim();
+      const subject = document.getElementById("subject").value.trim();
+      const message = document.getElementById("textarea").value.trim();
+
+      if (email === "" || pass === "" || subject === "" || message === "") {
+        alert("fill in all fields");
+        return;
+      }
+
+      var formData = $("#newsletterform").serialize();
+      $.ajax({
+        url: "{%url 'create_newsletter'%}",
+        type: "POST",
+        data: formData,
+        success: function (response) {
+          console.log("Успешно:", response);
+        },
+        error: function (error) {
+          console.error("Ошибка:", error);
+        },
+      });
+    });
+  });
+</script>

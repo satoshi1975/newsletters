@@ -1,0 +1,166 @@
+{%include 'base.html'%}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div class="alert alert-warning alert-dismissible fade show" role="alert"
+ id = "alert" style="display: none;">
+    <p id="alert-text"></p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+</div>
+<div class="container" id="sub_list_area">
+    <button 
+    id="add_sub"
+    type="button"
+    class="btn-primary"
+    data-mdb-toggle="modal"
+    data-mdb-target="#staticBackdropAddSub">
+    add subscriber</button>
+    <div class="container" id="list_of_subscribers">
+        <input type="text" id="filter-input" placeholder="Фильтр по email">    
+        <div id="sub_list">
+            {%for sub in sub_list%}
+            <div class="sub-card">
+            {{sub.email}}
+            <button class="delete-button position-absolute end-0" 
+            style="right: 20px;"
+            data-id="{{ sub.id }}">delete</button>
+            <div class="confirmation-buttons position-absolute end-0"
+             style="display: none; margin-right: 55px;">
+                <button class="confirm-yes">yes</button>
+                <button class="confirm-no">no</button>
+            </div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+</div>
+<div
+class="modal fade"
+id="staticBackdropAddSub"
+data-mdb-backdrop="static"
+data-mdb-keyboard="false"
+tabindex="-1"
+aria-labelledby="staticBackdropLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="btn-close" id='close-sub-form' data-mdb-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <form method="post" id="add_sub_form">
+          {% csrf_token %}
+          {{add_sub_form.as_p}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-mdb-dismiss="modal">Close</button>
+          <button type="button" id="submit-btn" class="btn-primary">Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+<div id="new_subs">
+
+</div>
+
+<script>
+    $(document).ready(function() {
+    $("#submit-btn").click(function() {
+        const formFields = document.querySelectorAll('#add_sub_form input');
+        let allFieldsFilled = true;
+        var formData = $("#add_sub_form").serialize();
+        const first_name = document.getElementById('id_first_name').value.trim();
+        const last_name = document.getElementById('id_last_name').value.trim();
+        const date_of_birth = document.getElementById('id_date_of_birth').value.trim();
+        const email = document.getElementById('id_email').value.trim();
+        const btn_close = document.getElementById('close-sub-form');
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (first_name === '' || last_name === '' || date_of_birth === '' || email === '') {
+        alert('Заполните все поля');
+        return;
+        }
+        if (!emailPattern.test(email)) {
+          alert('Введите корректный email');
+          return;
+        }
+            
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'add_sub' %}",  
+            data: formData,
+            success: function(response) {
+                console.log(response.email)
+                var popup = document.getElementById('alert');
+                var popupText = document.getElementById('alert-text')
+                btn_close.click();
+                popupText.textContent = 'Subscriber ' + response.email + ' has been added'
+                popup.style.display = 'flex';
+                setTimeout(function() {
+                    popup.style.opacity = '1';
+                }, 10); 
+
+                setTimeout(function() {
+                    popup.style.opacity = '0';
+                    setTimeout(function() {
+                        popup.style.display = 'none';
+                    }, 500); 
+                }, 4000); 
+            },
+            error: function(error) {
+                console.error('Произошла ошибка:', error);
+                document.body.appendChild(notification);
+                $("#sub_list").append('<div class="sub-card">' + response.email + '</div>');
+                $("#staticBackdropAddSub").modal("hide");
+            },
+        });
+    });
+});
+
+</script>
+<script>
+    $(document).ready(function() {
+    $("#filter-input").on("input", function() {
+        var searchText = $(this).val().toLowerCase();
+        $(".sub-card").each(function() {
+            var subCardText = $(this).text().toLowerCase();
+            if (subCardText.indexOf(searchText) === -1) {
+                $(this).hide();
+            } else {
+                $(this).show();
+            }
+        });
+    });
+});
+
+</script>
+
+<script>
+    $(document).ready(function() {
+    $(document).on("click", ".delete-button", function() {
+        var subscriberId = $(this).data("id");
+        var confirmationButtons = $(this).siblings(".confirmation-buttons");
+        $(this).hide();
+        confirmationButtons.show();
+        
+        confirmationButtons.find(".confirm-yes").click(function() {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'del_sub' %}",
+                data: { subscriber_id: subscriberId, csrfmiddlewaretoken: "{{ csrf_token }}" },
+                success: function() {
+                    confirmationButtons.hide();
+                    confirmationButtons.siblings(".delete-button").parent().remove();
+                },
+            });
+        });
+        
+        confirmationButtons.find(".confirm-no").click(function() {
+            confirmationButtons.hide();
+            confirmationButtons.siblings(".delete-button").show();
+        });
+    });
+});
+</script>

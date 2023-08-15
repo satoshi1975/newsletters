@@ -1,0 +1,64 @@
+{%include 'base.html'%}
+
+<div style="display: flex">
+  <div id="sent-messages">
+    <div>
+      <div id="searhcarea">
+        <label for="searchletter">Search</label>
+        <input type="text" id="searchletter" />
+      </div>
+      <div style="height: 776px; overflow: auto">
+        <div id="list-of-messages">
+          {%for message in messages%}
+
+          <button id="message-btn" class="message-btn" data-id="{{message.id}}">
+            <h5>{{message.recipient}}</h5>
+            {{message.status}}
+          </button>
+
+          {%endfor%}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="message-text">
+    <div id="message-body"></div>
+  </div>
+</div>
+
+<script>
+  const textArea = document.getElementById("message-body");
+  $(document).ready(function () {
+    $(".message-btn").click(function () {
+      var messageId = $(this).data("id");
+      $.ajax({
+        type: "POST",
+        url: "{% url 'show_message' %}",
+        data: {
+          message_id: messageId,
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        success: function (response) {
+          textArea.textContent = response.text;
+          console.log(response.text);
+        },
+      });
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    $("#searchletter").on("input", function () {
+      var searchText = $(this).val().toLowerCase();
+      $(".message-btn").each(function () {
+        var subCardText = $(this).text().toLowerCase();
+        if (subCardText.indexOf(searchText) === -1) {
+          $(this).hide();
+        } else {
+          $(this).show();
+        }
+      });
+    });
+  });
+</script>

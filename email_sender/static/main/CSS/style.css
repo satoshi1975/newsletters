@@ -1,0 +1,198 @@
+#login-but {
+  top: 7px;
+  position: relative;
+  border-radius: 20px;
+  background-color: blue;
+}
+#logout-btn {
+  text-decoration: none;
+  top: 7px;
+  background-color: blue;
+  position: relative;
+  right: 10px;
+  font-size: larger;
+  border-radius: 20px;
+  width: 100px;
+  display: flex;
+  justify-content: center;
+}
+#sub_list_area {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+#add_sub {
+  top: 100px;
+  position: relative;
+  height: 40px;
+  width: 265px;
+}
+#list_of_subscribers {
+  position: relative;
+  top: 200px;
+  overflow-x: auto;
+  width: 100%;
+  border: 1px solid #ccc;
+  height: 644px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.sub-card {
+  cursor: pointer;
+  background-color: #0d6efd;
+  height: 75px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-style: solid;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  color: white;
+}
+#sub-card :hover {
+  background-color: black;
+}
+
+hr {
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+.delete-button {
+  margin-right: 53px;
+  border-radius: 20px;
+  height: 54px;
+  width: 78px;
+}
+.confirmation-buttons button {
+  border-radius: 20px;
+  height: 40px;
+  width: 40px;
+}
+#newsletter {
+  display: flex;
+  flex-direction: column;
+  margin-top: 67px;
+  margin-left: 50px;
+  margin-right: 20px;
+}
+#id_recipients {
+  left: 50px;
+  position: relative;
+  overflow: auto;
+  height: 326px;
+  border-style: groove;
+  margin-right: 65px;
+}
+#filter-send-input {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  margin-left: 50px;
+}
+#send-men {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+#send-men button {
+  width: 153px;
+  margin-top: 13px;
+  margin-bottom: 13px;
+}
+
+#newsletter_label {
+  background-color: dodgerblue;
+  display: flex;
+  justify-content: center;
+  bottom: 36px;
+  position: relative;
+  color: white;
+}
+
+#userpassform {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+
+#newsletters_link {
+  display: block !important;
+}
+#subscribers_link {
+  display: block !important;
+}
+#list_of_messages {
+  
+  width: 100%;
+  height: 725px;
+  overflow: auto;
+}
+
+#sent-messages {
+  margin-top: 50px;
+  margin-left: 30px;
+  width: 494px;
+  
+}
+#message-btn {
+  background-color: aliceblue;
+  width: 100%;
+  height: 100%;
+}
+#message-btn:hover {
+  background-color: #0d6efd;
+}
+#list-of-messages {
+  margin-top: 27px;
+}
+
+#searhcarea {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#message-text {
+  width: 65%;
+  height: 774px;
+  top: 73px;
+  position: relative;
+  margin-left: 86px;
+  overflow: auto;
+  border-style: solid;
+  padding-left: 33px;
+  padding-right: 33px;
+}
+#recipient-mail {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+#message-body {
+  margin-top: 30px;
+}
+#main-page-content{
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 200px;
+}
+
+#list-of-opportunities{
+    margin-left: 40px;
+    font-size: xxx-large;
+}
+#list-of-opportunities p{
+    background-color: cornsilk;
+}
+#opportunities{
+    font-size: xxx-large;
+}

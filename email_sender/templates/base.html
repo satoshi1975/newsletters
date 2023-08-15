@@ -1,0 +1,165 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+   
+    <link
+        href="{%static 'CSS/bootstrap.min.css'%}"
+        type="text/css"
+        rel="stylesheet"
+      />
+    <link
+        href="{%static 'main/CSS/style.css'%}"
+        type="text/css"
+        rel="stylesheet"
+      />
+    <title>Document</title>
+</head>
+<body>
+  <script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"
+></script>
+  <script>
+    type="text/javascript"
+    src="{%static 'JS/bootstrap.min.js'%}"
+  </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home'%}">Navbar</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          {%if user.is_authenticated%}
+          <li class="nav-item">
+            <a class="nav-link active" id="subscribers_link" aria-current="page" href="{% url 'sub_list' %}">subscribers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" id="newsletter_link" href="{%url 'newsletter'%}">newsletters</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" id="sent_link" href="{%url 'sent_emails'%}">sent</a>
+          </li>
+          {%else%}
+          <li class="nav-item">
+            <a class="nav-link active" id="subscribers_link_dis" aria-current="page" href="{% url 'sub_list' %}">subscribers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" id="newsletter_link_dis" href="{%url 'newsletter'%}">newsletters</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" id="sent_link_dis" href="{%url 'sent_emails'%}">sent</a>
+          </li>
+          {%endif%}
+          {% if user.is_authenticated %}
+          <li class="nav-item position-absolute end-0">
+            <a href="{% url 'logout' %}" class="btn-primary" id="logout-btn">log out</a>
+          </li>
+          {%else%}   
+          <li class="nav-item position-absolute end-0" style="padding-right: 5rem;">
+            <button id="login-but" type="button" class="btn-primary" data-mdb-toggle="modal" data-mdb-target="#staticBackdropReg">
+              register 
+            </button>
+            
+          </li>
+          <li class="nav-item position-absolute end-0">
+            <button id="login-but" type="button" class="btn-primary" data-mdb-toggle="modal" data-mdb-target="#staticBackdropLogin">
+              log in 
+            </button>
+          </li>
+          {%endif%}
+</ul>
+</div>
+</div>
+
+
+</nav>
+
+  
+  <div
+    class="modal fade"
+    id="staticBackdropReg"
+    data-mdb-backdrop="static"
+    data-mdb-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" action="{% url 'register' %}">
+            {% csrf_token %}
+            {{reg_form.as_p}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-secondary" data-mdb-dismiss="modal">Close</button>
+            <button type="submit" class="btn-primary">Register</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="modal fade"
+    id="staticBackdropLogin"
+    data-mdb-backdrop="static"
+    data-mdb-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            {{login_form.as_p}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-secondary" data-mdb-dismiss="modal">Close</button>
+            <button type="submit" class="btn-primary">Log in</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{%block content%}
+{%endblock%}
+</body>
+<script>
+  
+  const subscribers_link_dis = document.getElementById('subscribers_link_dis');
+  const newsletter_link_dis = document.getElementById('newsletter_link_dis');
+  const sent_link_dis = document.getElementById('sent_link_dis');
+  
+  subscribers_link_dis.addEventListener('click', function(event) {
+    event.preventDefault();
+    alert('Log in or register')    
+});
+  sent_link_dis.addEventListener('click',function(event){
+    event.preventDefault();
+    alert('Log in or register')
+  }
+  )
+  newsletter_link_dis.addEventListener('click', function(event) {
+    event.preventDefault();
+    alert('Log in or register')
+});
+  </script>
